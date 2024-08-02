@@ -1,0 +1,21 @@
+#!/usr/bin/expect -f
+
+set timeout -1
+set password [lindex $argv 0]
+set user [lindex $argv 1]
+set host [lindex $argv 2]
+
+spawn ssh-copy-id $user@$host
+expect {
+    "password:" {
+        send "$password\r"
+        exp_continue
+    }
+    "*yes/no" {
+        send "yes\r"
+        exp_continue
+    }
+    "Now try logging into the machine, with" {
+        send "\r"
+    }
+}
